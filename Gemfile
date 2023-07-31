@@ -18,6 +18,15 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Allow you to easily store a secure hash of your users' passwords. Read more: https://github.com/bcrypt-ruby/bcrypt-ruby
+gem 'bcrypt'
+
+# Generate JSON objects with a Builder-style DSL. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder'
+
+# A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard. Read more: https://github.com/jwt/ruby-jwt
+gem 'jwt'
+
 group :development, :test do
   # Step-by-step debugging and stack navigation in Pry. Read more: https://github.com/deivid-rodriguez/pry-byebug
   gem 'pry-byebug'
