@@ -6,4 +6,12 @@ module ErrorsResponseConcern
 
     render status: :unprocessable_entity, template: 'auth/auth_failure'
   end
+
+  def unauthorized
+    render status: :unauthorized, json: {
+      errors: [
+        I18n.t('errors.controllers.auth.unauthenticated')
+      ]
+    }
+  end
 end
