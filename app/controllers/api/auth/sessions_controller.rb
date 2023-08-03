@@ -8,6 +8,11 @@ class Api::Auth::SessionsController < ApplicationController
 
     @user = User.find_by(email: params[:email])
 
+    return render status: :unauthorized,
+      json: {
+        message: 'Voce deve confirmar sua conta para poder logar'
+      } unless @user.email_confirmed?
+
     if @user
       if @user.authenticate(params[:password])
         @token = session_create(@user.id)
