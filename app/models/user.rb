@@ -19,7 +19,7 @@ class User < ApplicationRecord
             format: {
               with: /\A(?=.*).{8,72}\z/,
               message: I18n.t("errors.models.user.format_password")
-            }, if: :password_required?
+            }
 
   after_create :send_confirm_email
 
@@ -46,6 +46,6 @@ class User < ApplicationRecord
   end
 
   def downcase_email!
-    email&.donwcase!
+    email&.downcase!
   end
 end
