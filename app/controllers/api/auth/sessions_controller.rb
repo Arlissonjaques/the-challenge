@@ -1,7 +1,7 @@
 class Api::Auth::SessionsController < ApplicationController
   include SessionConcern
 
-  skip_before_action :authenticate_user
+  skip_before_action :authenticate_user, only: :create
 
   def create
     return error_insufficient_params unless params[:email].present? && params[:password].present?
