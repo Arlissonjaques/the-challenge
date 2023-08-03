@@ -15,8 +15,8 @@ module AuthenticateRequest
       user = User.find_by(id: data[:user_id])
       session = Session.search(data[:user_id], data[:token])
 
-      if user && session && !session.is_late?
-        session.used
+      if user && session && session.expired?
+        session.last_used
         @current_user ||= user
       end
     end
