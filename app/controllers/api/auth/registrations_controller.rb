@@ -2,6 +2,8 @@ class Api::Auth::RegistrationsController < ApplicationController
   include SessionConcern
   include ErrorsResponseConcern
 
+  skip_before_action :authenticate_user
+
   def create
     @user = User.new(registration_params)
 
@@ -20,11 +22,20 @@ class Api::Auth::RegistrationsController < ApplicationController
     end
   end
 
+  def destroy
+    current_user.destroy
+    success_user_destroy
+  end
+
   protected
 
   def success_user_created
     response.headers['Authorization'] = "Bearer #{@token}"
     render status: :created, template: "auth/auth_success"
+  end
+
+  def success_user_destroy
+    render status: :no_content, json: {}
   end
 
   private
