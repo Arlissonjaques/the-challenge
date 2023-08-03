@@ -46,6 +46,8 @@ group :development, :test do
   gem 'faker'
   # Strategies for cleaning databases using ActiveRecord. Read more: https://github.com/DatabaseCleaner/database_cleaner-active_record
   gem 'database_cleaner-active_record'
+  # A Ruby gem to load environment variables from `.env`. Read more: https://github.com/bkeepers/dotenv
+  gem 'dotenv-rails'
 end
 
 group :development do

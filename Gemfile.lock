@@ -95,6 +95,10 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -117,6 +121,10 @@ GEM
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    jbuilder (2.11.5)
+      actionview (>= 5.0.0)
+      activesupport (>= 5.0.0)
+    jwt (2.7.1)
     kwalify (0.7.2)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -259,8 +267,11 @@ DEPENDENCIES
   bcrypt
   bootsnap
   database_cleaner-active_record
+  dotenv-rails
   factory_bot_rails
   faker
+  jbuilder
+  jwt
   pg (~> 1.1)
   pry-byebug
   puma (~> 5.0)
