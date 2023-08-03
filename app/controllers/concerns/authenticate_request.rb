@@ -9,13 +9,14 @@ module AuthenticateRequest
 
   def current_user
     @current_user = nil
+    token = decoded_token
 
-    if decoded_token
-      data = decoded_token
+    if token
+      data = token
       user = User.find_by(id: data[:user_id])
       session = Session.search(data[:user_id], data[:token])
 
-      if user && session && session.expired?
+      if user && session && !session.expired?
         session.last_used
         @current_user ||= user
       end

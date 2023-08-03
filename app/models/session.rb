@@ -1,6 +1,6 @@
 class Session < ApplicationRecord
   TOKEN_LENGTH = 32
-  TOKEN_LIFETIME = 1.hour
+  TOKEN_LIFETIME = 30.minutes
 
   belongs_to :user
 
@@ -15,7 +15,7 @@ class Session < ApplicationRecord
   end
 
   def expired?
-    if (last_used_at + TOKEN_LIFETIME) >= Time.now
+    if (last_used_at + TOKEN_LIFETIME) <= Time.now
       update(status: false)
       true
     else
