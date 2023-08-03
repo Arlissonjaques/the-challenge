@@ -8,15 +8,7 @@ class Api::Auth::RegistrationsController < ApplicationController
     @user = User.new(registration_params)
 
     if @user.save
-      @token = session_create(@user.id)
-
-      if @token
-        @token = "Bearer #{@token}"
-
-        return success_user_created
-      else
-        return unprocessable_entity(I18n.t('Falha ao criar essa merda'))
-      end
+      success_user_created
     else
       unprocessable_entity(@user.errors.full_messages)
     end
