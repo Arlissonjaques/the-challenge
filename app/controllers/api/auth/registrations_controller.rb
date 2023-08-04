@@ -2,7 +2,7 @@ class Api::Auth::RegistrationsController < ApplicationController
   include SessionConcern
   include ErrorsResponseConcern
 
-  skip_before_action :authenticate_user
+  skip_before_action :authenticate_user, only: :destroy
 
   def create
     @user = User.new(registration_params)

@@ -8,26 +8,13 @@ class Api::Auth::SessionsController < ApplicationController
 
     @user = User.find_by(email: params[:email])
 
-    return render status: :unauthorized,
-      json: {
-        message: 'Voce deve confirmar sua conta para poder logar'
-      } unless @user.email_confirmed?
+    return unauthorized_unconfirmed unless @user&.email_confirmed?
+    return error_invalid_credentials if @user.nil? || !@user.authenticate(params[:password])
 
-    if @user
-      if @user.authenticate(params[:password])
-        @token = session_create(@user.id)
-        if @token
-          @token = "Bearer #{@token}"
-          return success_session_created
-        else
-          return error_token_create
-        end
-      else
-        return error_invalid_credentials
-      end
-    else
-      return error_invalid_credentials
-    end
+    @token = session_create(@user.id)
+    return success_session_created if @token
+
+    error_token_create
   end
 
   def validate_token; end
@@ -37,9 +24,11 @@ class Api::Auth::SessionsController < ApplicationController
     data_token = JsonWebToken.decode(token)
 
     session = Session.find_by(token: data_token[:token])
-    session.close_session
 
-    success_session_destroy
+    if session
+      session.close_session
+      success_session_destroy
+    end
   end
 
   protected
@@ -56,6 +45,12 @@ class Api::Auth::SessionsController < ApplicationController
 
   def success_session_destroy
     render status: :no_content, json: {}
+  end
+
+  def unauthorized_unconfirmed
+    render status: :unauthorized, json: {
+      message: 'Voce deve confirmar sua conta para poder logar'
+    }
   end
 
   def error_invalid_credentials
