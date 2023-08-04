@@ -13,6 +13,11 @@ Rails.application.routes.draw do
       # confirmations
       get 'confirm_email', to: 'confirmations#confirm_email'
       put 'resend_confirm_email', to: 'confirmations#resend_confirm_email'
+
+      # reset_password
+      post 'forgot_password_email', to: 'passwords#create_reset_password_email'
+      get 'verify_reset_password_email', to: 'passwords#verify_reset_email_token'
+      put 'reset_password', to: 'passwords#reset_password'
     end
   end
 end
