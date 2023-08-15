@@ -1,10 +1,10 @@
 module AuthenticateRequest
   extend ActiveSupport::Concern
-  include ErrorsResponseConcern
+  include ResponseConcern
   require 'json_web_token'
 
   def authenticate_user
-    return unauthorized unless current_user
+    return error_response(:unauthorized, 'unauthenticated') unless current_user
   end
 
   def current_user
@@ -31,7 +31,7 @@ module AuthenticateRequest
       begin
         @decoded_token ||= JsonWebToken.decode(token)
       rescue Error => e
-        return unauthorized
+        return error_response(:unauthorized, 'unauthenticated')
       end
     end
   end

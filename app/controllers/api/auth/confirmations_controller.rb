@@ -1,45 +1,49 @@
 class Api::Auth::ConfirmationsController < ApplicationController
   include SessionConcern
+  include ResponseConcern
 
-  skip_before_action :authenticate_user, only: :resend_confirm_email
+  skip_before_action :authenticate_user
 
   def confirm_email
-    return error_insufficient_params unless params[:token]
+    if params[:token].blank?
+      return error_response(:unprocessable_entity, :insufficient_params)
+    end
 
     verification = UserVerification.search(:pending, :confirm_email, params[:token])
 
-    return error_invalid_token if verification.nil?
+    return error_response(:unauthorized, :invalid_token) if verification.nil?
 
-    if (verification.created_at + UserVerification::TOKEN_LIFETIME) > Time.now
+    if token_not_expired?(verification)
       verification.user.confirm
       verification.update(status: :done)
       #TODO: redirect to the page that says the email is confirmed successfully or can be redirected to the app
       # redirect_to "#{ENV['REDIRECT_CONFIRM_EMAIL']}?token=#{@token}"
     else
-      error_confirm_email_late
+      error_response(:unauthorized, :expired_token)
     end
   end
 
-  def resend_confirm_email
-    current_user.send_confirm_email
-    success_resend_confirm_email
+  def send_confirmation_email
+    if params[:email].blank?
+      return error_response(:unprocessable_entity, :insufficient_params)
+    end
+
+    @user = User.find_by(email: params[:email])
+
+    if @user
+      if @user.send_confirm_email
+        return success_response(:created, :send_confirm_email)
+      else
+        return success_response(:ok,  :email_already_confirmed)
+      end
+    else
+      return error_response(:unprocessable_entity, :invalid_email)
+    end
   end
 
-  protected
+  private
 
-  def success_resend_confirm_email
-    render status: :ok, json: {message: I18n.t('messages.resend_confirm_email')}
-  end
-
-  def error_insufficient_params
-    render status: :unprocessable_entity, json: {errors: [I18n.t('errors.controllers.insufficient_params')]}
-  end
-
-  def error_confirm_email_late
-    render status: :unauthorized, json: {errors: [I18n.t('errors.controllers.verifications.late')]}
-  end
-
-  def error_invalid_token
-    render status: :unauthorized, json: {errors: [I18n.t('errors.controllers.verifications.invalid_token')]}
+  def token_not_expired?(verification)
+    (verification.created_at + UserVerification::TOKEN_LIFETIME) > Time.now
   end
 end

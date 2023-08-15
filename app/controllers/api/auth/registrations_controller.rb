@@ -1,33 +1,25 @@
 class Api::Auth::RegistrationsController < ApplicationController
   include SessionConcern
-  include ErrorsResponseConcern
+  include ResponseConcern
 
-  skip_before_action :authenticate_user, only: :destroy
+  skip_before_action :authenticate_user, only: :create
 
   def create
     @user = User.new(registration_params)
 
     if @user.save
-      success_user_created
+      success_response(:created)
     else
-      unprocessable_entity(@user.errors.full_messages)
+      error_response(:unprocessable_entity)
     end
   end
 
   def destroy
-    current_user.destroy
-    success_user_destroy
-  end
-
-  protected
-
-  def success_user_created
-    response.headers['Authorization'] = "Bearer #{@token}"
-    render status: :created, template: "auth/auth_success"
-  end
-
-  def success_user_destroy
-    render status: :no_content, json: {}
+    if current_user.destroy
+      render status: :no_content, json: {}
+    else
+      render status: :unprocessable_entity, json: {}
+    end
   end
 
   private

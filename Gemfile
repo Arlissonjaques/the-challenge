@@ -27,6 +27,9 @@ gem 'jbuilder'
 # A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard. Read more: https://github.com/jwt/ruby-jwt
 gem 'jwt'
 
+# Internationalization (i18n) library for Ruby. Read more: https://github.com/ruby-i18n/i18n
+gem 'i18n'
+
 group :development, :test do
   # Step-by-step debugging and stack navigation in Pry. Read more: https://github.com/deivid-rodriguez/pry-byebug
   gem 'pry-byebug'

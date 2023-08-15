@@ -1,7 +1,3 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
 # To use the locales, use `I18n.t`:
 #
 #     I18n.t "hello"
@@ -14,20 +10,34 @@
 #
 #     I18n.locale = :es
 #
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   "true": "foo"
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  success:
+    controllers:
+      auth:
+        send_confirm_email: 'Confirmation email sent successfully'
+        reset_password_email_sent: 'Password reset email sent'
+        valid_token: ''
+        session_created: 'Successful login'
+        user_created: 'User created successfully'
+        user_destroyed: ''
+        updated_password: 'Password successfully updated'
+
+  errors:
+    models:
+      user:
+        format_password: 'must be at least 8 characters long including letters, numbers and some special character: [!#@%$]'
+
+    controllers:
+      auth:
+        insufficient_params: 'Insufficient parameters'
+        token_not_created: 'Failed to try to login. Try again later'
+        invalid_credentials: 'Invalid email or password'
+        unconfirmed_email: 'Before you must confirm your email'
+        invalid_token: 'Invalid_token'
+        expired_token: 'Expired token'
+        different_passwords: 'Password and confirm password must be the same'
+        unauthenticated: 'You are not authenticated. Please login to access this feature'
+        invalid_email: 'No user found with this email'
+        failed_send_confirmation_email:  'Failed to send email confirmation email'
+        email_already_confirmed: 'Email already confirmed' 

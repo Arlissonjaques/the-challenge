@@ -1,28 +1,30 @@
 class Api::Auth::PasswordsController < ApplicationController
   include SessionConcern
+  include ResponseConcern
 
   before_action :authenticate_user, only: :reset_password
 
   def create_reset_password_email
-    return error_insufficient_params unless params[:email].present?
+    if params[:email].blank?
+      return error_response(:unprocessable_entity, 'insufficient_params')
+    end
 
-    user = User.find_by(email: params[:email])
+    @user = User.find_by(email: params[:email])
 
-    return render status: :unauthorized,
-      json: {
-        message: 'Voce deve confirmar sua conta'
-      } unless user.email_confirmed?
+    return error_response(:unprocessable_entity, 'invalid_email') if @user.nil?
+    return error_response(:unauthorized, 'unconfirmed_email') unless @user.email_confirmed?
 
-    user.send_reset_password_email unless user.nil?
-    success_send_reset_email
+    @user.send_reset_password_email
+
+    success_response(:created, 'reset_password_email_sent') #TODO: deveria retornar o usuario aqui?
   end
 
   def verify_reset_email_token
-    return error_insufficient_params unless params[:token]
+    return error_response(:unprocessable_entity, 'insufficient_params') unless params[:token]
 
     verification = UserVerification.search(:pending, :reset_email, params[:token])
 
-    return error_invalid_token if verification.nil?
+    return error_response(:unauthorized, 'invalid_token') if verification.nil?
 
     if (verification.created_at + UserVerification::TOKEN_LIFETIME) > Time.now
       verification.update(status: :done)
@@ -31,50 +33,25 @@ class Api::Auth::PasswordsController < ApplicationController
       #TODO: redirect to the page where a logged in user can change its password
       # redirect_to "#{ENV['REDIRECT_RESET_EMAIL']}?token=#{token}"
     else
-      error_reset_email_late
+      error_response(:unauthorized, 'expired_token')
     end
   end
 
   def reset_password
     @user = current_user
 
-    return error_insufficient_params unless params[:password].present? && params[:confirm_password].present?
-    return error_password_mismatch if params[:password] != params[:confirm_password]
+    if params[:password].blank? || params[:confirm_password].blank?
+      return error_response(:unprocessable_entity, 'insufficient_params')
+    end
+
+    if params[:password] != params[:confirm_password]
+      return error_response(:unprocessable_entity, 'different_passwords')
+    end
 
     if @user.update(password: params[:password])
-      return success_password_reset
+      return success_response(:ok, 'email_reset_success')
     else
-      return error_user_save
+      return error_response(:unprocessable_entity)
     end
-  end
-
-  protected
-
-  def error_insufficient_params
-    render status: :unprocessable_entity, json: {errors: [I18n.t('errors.controllers.insufficient_params')]}
-  end
-
-  def success_send_reset_email
-    render status: :created, json: {message: I18n.t('messages.reset_password_email_sent')}
-  end
-
-  def success_password_reset
-    render status: :ok, json: {message: I18n.t('messages.email_reset_success')}
-  end
-
-  def error_reset_email_late
-    render status: :unauthorized, json: {errors: [I18n.t('errors.controllers.verifications.late')]}
-  end
-
-  def error_invalid_token
-    render status: :unauthorized, json: {errors: [I18n.t('errors.controllers.verifications.invalid_token')]}
-  end
-
-  def error_user_save
-    render status: :unprocessable_entity, json: {errors: @user.errors.full_messages}
-  end
-
-  def error_password_mismatch
-    render status: :unprocessable_entity, json: {errors: [I18n.t('errors.controllers.auth.password_mismatch')]}
   end
 end
