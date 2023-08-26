@@ -27,6 +27,7 @@ en:
     models:
       user:
         format_password: 'must be at least 8 characters long including letters, numbers and some special character: [!#@%$]'
+        format_email: 'needs to be in the correct format such as: example@email.com'
 
     controllers:
       auth:
