@@ -4,9 +4,9 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :user_verifications, dependent: :destroy
 
-  before_save :downcase_email!
+  enum role: { admin: 0, user: 1 }
 
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, :role, :password, presence: true
   validates :email, presence: true,
             uniqueness: {
               case_sensitive: false
@@ -21,6 +21,7 @@ class User < ApplicationRecord
               message: I18n.t("errors.models.user.format_password")
             }
 
+  before_save :downcase_email!
   after_create :send_confirm_email
 
   def email_confirmed?
