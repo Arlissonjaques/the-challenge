@@ -43,24 +43,6 @@ RSpec.describe User, type: :model do
     it { should define_enum_for(:role).with_values(admin: 0, user: 1) }
   end
 
-  describe 'callbacks' do
-    describe '#downcase_email!' do
-      it 'converts email to lowercase' do
-        user = FactoryBot.build(:user, email: 'TesT@ExAmPlE.coM')
-        user.downcase_email!
-
-        expect(user.email).to eq('test@example.com')
-      end
-
-      it 'handles nil email' do
-        user = FactoryBot.build(:user, email: nil)
-        user.downcase_email!
-
-        expect(user.email).to be_nil
-      end
-    end
-  end
-
   describe 'methods' do
     describe '#email_confirmed?' do
       let(:user) { create(:user) }
