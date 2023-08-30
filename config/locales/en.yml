@@ -42,3 +42,4 @@ en:
         invalid_email: 'No user found with this email'
         failed_send_confirmation_email:  'Failed to send email confirmation email'
         email_already_confirmed: 'Email already confirmed' 
+        current_password_invalid: 'The current password is invalid'

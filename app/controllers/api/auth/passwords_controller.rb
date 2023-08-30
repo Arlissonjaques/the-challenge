@@ -39,19 +39,35 @@ class Api::Auth::PasswordsController < ApplicationController
 
   def reset_password
     @user = current_user
-
-    if params[:password].blank? || params[:confirm_password].blank?
-      return error_response(:unprocessable_entity, 'insufficient_params')
-    end
-
-    if params[:password] != params[:confirm_password]
-      return error_response(:unprocessable_entity, 'different_passwords')
-    end
-
-    if @user.update(password: params[:password])
-      return success_response(:ok, 'email_reset_success')
+  
+    if current_password_invalid?
+      return error_response(:unprocessable_entity, :current_password_invalid)
+    elsif insufficient_params?
+      return error_response(:unprocessable_entity, :insufficient_params)
+    elsif different_passwords?
+      return error_response(:unprocessable_entity, :different_passwords)
+    elsif update_password
+      return success_response(:ok, :updated_password)
     else
       return error_response(:unprocessable_entity)
     end
+  end
+
+  private
+
+  def current_password_invalid?
+    params[:current_password].blank? || !@user.authenticate(params[:current_password])
+  end
+
+  def insufficient_params?
+    params[:new_password].blank? || params[:confirm_password].blank?
+  end
+
+  def different_passwords?
+    params[:new_password] != params[:confirm_password]
+  end
+
+  def update_password
+    @user.update(password: params[:new_password])
   end
 end
