@@ -34,7 +34,7 @@ class Api::Auth::ConfirmationsController < ApplicationController
       if @user.send_confirm_email
         return success_response(:created, :send_confirm_email)
       else
-        return success_response(:ok,  :email_already_confirmed)
+        return error_response(:conflict, :email_already_confirmed)
       end
     else
       return error_response(:unprocessable_entity, :invalid_email)
