@@ -21,7 +21,6 @@ class User < ApplicationRecord
               message: I18n.t("errors.models.user.format_password")
             }
 
-  before_save :downcase_email!
   after_create :send_confirm_email
 
   def email_confirmed?
@@ -29,7 +28,7 @@ class User < ApplicationRecord
   end
 
   def confirm
-    update(email_confirmed_at: Time.now)
+    update_columns(email_confirmed_at: Time.now)
   end
 
   def send_confirm_email
@@ -44,9 +43,5 @@ class User < ApplicationRecord
       verification = UserVerification.create(user_id: id, verify_type: :reset_email)
       # TODO: send reset password email
     end
-  end
-
-  def downcase_email!
-    email&.downcase!
   end
 end
