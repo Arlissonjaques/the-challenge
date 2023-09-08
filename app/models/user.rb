@@ -6,19 +6,14 @@ class User < ApplicationRecord
 
   enum role: { admin: 0, user: 1 }
 
-  validates :first_name, :last_name, :role, :password, presence: true
+  validates :first_name, :last_name, :role, presence: true
   validates :email, presence: true,
             uniqueness: {
               case_sensitive: false
             },
             format: {
               with: /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/,
-              message: I18n.t("errors.models.user.format_email")
-            }
-  validates :password,
-            format: {
-              with: /\A(?=.*).{8,72}\z/,
-              message: I18n.t("errors.models.user.format_password")
+              message: I18n.t('errors.models.user.format_email')
             }
 
   after_create :send_confirm_email

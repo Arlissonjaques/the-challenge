@@ -13,11 +13,6 @@ RSpec.describe User, type: :model do
         .with_message(I18n.t('errors.models.user.format_email'))
     end
 
-    it do
-      should validate_presence_of(:password)
-        .with_message(I18n.t('errors.models.user.format_password'))
-    end
-
     context 'with email in the correct format' do
       it 'must accept the formats' do
         should allow_value('user@example.com').for(:email)
