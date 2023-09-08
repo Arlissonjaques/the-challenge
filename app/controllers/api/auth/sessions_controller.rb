@@ -31,7 +31,7 @@ class Api::Auth::SessionsController < ApplicationController
 
     if session
       session.close_session
-      render status: :no_content
+      render json: {}, status: :no_content 
     end
   end
 end
