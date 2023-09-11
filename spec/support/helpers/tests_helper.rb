@@ -3,6 +3,13 @@ module ApiAsJsonHelper
     JSON.parse(response.body, symbolize_names: true)
   end
 
+  def login_params
+    {
+      email: user.email,
+      password: user.password
+    }
+  end
+
   def authenticated_header
     post api_auth_sign_in_path, params: login_params
 

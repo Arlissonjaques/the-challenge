@@ -104,11 +104,4 @@ RSpec.describe Api::Auth::SessionsController, type: :request do
 
     # TODO: Add failure context.
   end
-
-  def login_params
-    {
-      email: user.email,
-      password: user.password
-    }
-  end
 end
