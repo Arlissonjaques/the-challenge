@@ -15,6 +15,11 @@ class User < ApplicationRecord
               with: /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/,
               message: I18n.t('errors.models.user.format_email')
             }
+  validates :password,
+            format: {
+              with: /\A(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,72}\z/,
+              message: I18n.t('errors.models.user.format_password')
+            }
 
   after_create :send_confirm_email
 
