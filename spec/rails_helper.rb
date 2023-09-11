@@ -6,6 +6,11 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 
+HELPER_FILES = Rails.root.join('spec', 'support', 'helpers', '*.rb')
+
+Dir[
+  File.expand_path(HELPER_FILES),
+].each { |file| require file }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
