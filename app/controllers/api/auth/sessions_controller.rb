@@ -17,8 +17,6 @@ class Api::Auth::SessionsController < ApplicationController
 
     @token = session_create(@user.id)
     return success_response(:created, '') if @token
-
-    error_response(:unprocessable_entity, 'token_not_created')
   end
 
   def validate_token; end
