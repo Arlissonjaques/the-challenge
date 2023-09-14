@@ -15,8 +15,8 @@ Rails.application.routes.draw do
       post 'send_confirmation_email', to: 'confirmations#send_confirmation_email'
 
       # reset_password
-      post 'forgot_password_email', to: 'passwords#create_reset_password_email'
-      get 'verify_reset_password_email', to: 'passwords#verify_reset_email_token'
+      post 'forgot_password', to: 'passwords#forgot_password'
+      get 'verify_reset_password_token', to: 'passwords#verify_reset_password_token'
       put 'reset_password', to: 'passwords#reset_password'
     end
   end
