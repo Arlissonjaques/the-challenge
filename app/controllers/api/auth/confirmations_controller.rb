@@ -5,9 +5,7 @@ class Api::Auth::ConfirmationsController < ApplicationController
   skip_before_action :authenticate_user
 
   def confirm_email
-    if params[:token].blank?
-      return error_response(:unprocessable_entity, :insufficient_params)
-    end
+    return error_response(:unprocessable_entity, :insufficient_params) if params[:token].blank?
 
     verification = UserVerification.search(:pending, :confirm_email, params[:token])
 
@@ -16,7 +14,7 @@ class Api::Auth::ConfirmationsController < ApplicationController
     if token_not_expired?(verification)
       verification.user.confirm
       verification.update(status: :done)
-      #TODO: redirect to the page that says the email is confirmed successfully or can be redirected to the app
+      # TODO: redirect to the page that says the email is confirmed successfully or can be redirected to the app
       # redirect_to "#{ENV['REDIRECT_CONFIRM_EMAIL']}?token=#{@token}"
     else
       error_response(:unauthorized, :expired_token)
@@ -24,21 +22,14 @@ class Api::Auth::ConfirmationsController < ApplicationController
   end
 
   def send_confirmation_email
-    if params[:email].blank?
-      return error_response(:unprocessable_entity, :insufficient_params)
-    end
+    return error_response(:unprocessable_entity, :insufficient_params) if params[:email].blank?
 
     @user = User.find_by(email: params[:email])
 
-    if @user
-      if @user.send_confirm_email
-        return success_response(:created, :send_confirm_email)
-      else
-        return error_response(:conflict, :email_already_confirmed)
-      end
-    else
-      return error_response(:unprocessable_entity, :invalid_email)
-    end
+    return error_response(:unprocessable_entity, :invalid_email) unless @user
+    return success_response(:created, :send_confirm_email) if @user.send_confirm_email
+
+    error_response(:conflict, :email_already_confirmed)
   end
 
   private

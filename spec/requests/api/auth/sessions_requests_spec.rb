@@ -27,7 +27,7 @@ RSpec.describe Api::Auth::SessionsController, type: :request do
       context 'when the password is incorrect' do
         before do
           params = { email: user.email, password: 's3nh@' }
-          post api_auth_sign_in_path, params: params
+          post api_auth_sign_in_path, params:
         end
 
         it 'returns status 401 (Unauthorized)' do
@@ -42,11 +42,11 @@ RSpec.describe Api::Auth::SessionsController, type: :request do
       context 'when the email is incorrect' do
         before do
           params = { email: 'email@test.com', password: user.password }
-          post api_auth_sign_in_path, params: params
+          post api_auth_sign_in_path, params:
         end
 
         it 'returns status 401 (Unauthorized)' do
-          expect(response).to have_http_status(401)          
+          expect(response).to have_http_status(401)
         end
 
         it 'returns an appropriate error message' do
@@ -79,7 +79,7 @@ RSpec.describe Api::Auth::SessionsController, type: :request do
       end
 
       it 'returns an error message indicating insufficient parameters' do
-        expect(parsed_body[:errors]).to include('Insufficient parameters')        
+        expect(parsed_body[:errors]).to include('Insufficient parameters')
       end
     end
   end

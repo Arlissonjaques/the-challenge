@@ -8,14 +8,14 @@ RSpec.describe Api::Auth::ConfirmationsController, type: :request do
       create(
         :user_verification,
         verify_type: :confirm_email,
-        user: user
+        user:
       )
     end
     let!(:expiraed_verification) do
       create(
-        :user_verification, 
+        :user_verification,
         verify_type: :confirm_email,
-        user: user,
+        user:,
         created_at: 1.week.ago
       )
     end
@@ -23,7 +23,7 @@ RSpec.describe Api::Auth::ConfirmationsController, type: :request do
     context 'when the token is valid and not expired' do
       before do
         get api_auth_confirm_email_path,
-          params: { token: correct_verification.token }
+            params: { token: correct_verification.token }
       end
 
       it 'confirms the user email' do
@@ -104,7 +104,7 @@ RSpec.describe Api::Auth::ConfirmationsController, type: :request do
         user.update(email_confirmed_at: nil)
         post api_auth_send_confirmation_email_path, params: { email: valid_email }
       end
-      
+
       it 'returns an internal server error' do
         expect(response).to have_http_status(409)
         expect(parsed_body[:errors]).to include('Failed to confirm email or email has already been confirmed')

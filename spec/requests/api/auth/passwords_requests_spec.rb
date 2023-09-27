@@ -68,7 +68,7 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
     before do
       get api_auth_verify_reset_password_token_path,
-        params: { token: user_verification.token }
+          params: { token: user_verification.token }
     end
 
     context 'when the token is valid and within expiration' do
@@ -103,7 +103,7 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
     end
 
     context 'when the token has expired' do
-      let!(:user_verification) do 
+      let!(:user_verification) do
         create(
           :user_verification,
           created_at: 2.days.ago,
@@ -113,7 +113,7 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
       before do
         get api_auth_verify_reset_password_token_path,
-          params: { token: user_verification.token }
+            params: { token: user_verification.token }
       end
 
       it 'returns an error response' do
@@ -139,8 +139,8 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
         before do
           put api_auth_reset_password_path,
-            headers: authenticated_header,
-            params: params
+              headers: authenticated_header,
+              params:
         end
 
         it 'returns an error response' do
@@ -161,8 +161,8 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
         before do
           put api_auth_reset_password_path,
-            headers: authenticated_header,
-            params: params
+              headers: authenticated_header,
+              params:
         end
 
         it 'returns an error response' do
@@ -185,8 +185,8 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
           user.update(password: '0ld5Up3r53nh@')
 
           put api_auth_reset_password_path,
-            headers: authenticated_header,
-            params: params
+              headers: authenticated_header,
+              params:
         end
 
         it 'returns an error response' do
@@ -207,8 +207,8 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
         before do
           put api_auth_reset_password_path,
-            headers: authenticated_header,
-            params: params
+              headers: authenticated_header,
+              params:
         end
 
         it 'returns an error response' do
@@ -233,8 +233,8 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
         before do
           put api_auth_reset_password_path,
-            headers: authenticated_header,
-            params: params
+              headers: authenticated_header,
+              params:
         end
 
         it 'resets the password' do
@@ -261,7 +261,7 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
 
       before do
         put api_auth_reset_password_path,
-          params: params
+            params:
       end
 
       it 'should return a not logged in error' do
