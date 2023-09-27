@@ -24,4 +24,8 @@ class UserVerification < ApplicationRecord
       break random_token unless UserVerification.exists?(token: random_token)
     end
   end
+
+  def done?
+    status == STATUS_DONE
+  end
 end
