@@ -98,7 +98,7 @@ RSpec.describe Api::Auth::PasswordsController, type: :request do
       it 'returns an error response' do
         expect(response).to have_http_status(401)
         expect(parsed_body[:successful]).to be false
-        expect(parsed_body[:errors]).to include('Invalid_token')
+        expect(parsed_body[:errors]).to include('Invalid token')
       end
     end
 
