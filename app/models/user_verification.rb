@@ -2,6 +2,10 @@ class UserVerification < ApplicationRecord
   TOKEN_LENGTH = 32
   TOKEN_LIFETIME = 1.hours
 
+  STATUS_PENDING = 'pending' 
+  STATUS_DONE = 'done'
+  STATUS_FAILED = 'failed'
+
   belongs_to :user
 
   before_validation :generate_token, on: :create
