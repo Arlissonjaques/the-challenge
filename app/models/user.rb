@@ -22,14 +22,14 @@ class User < ApplicationRecord
               message: I18n.t('errors.models.user.format_password')
             }
 
-  after_create :send_confirm_email
+  after_create :confirm
 
   def email_confirmed?
     !email_confirmed_at.nil?
   end
 
   def confirm
-    update_columns(email_confirmed_at: Time.now)
+    update_columns(email_confirmed_at: Time.now) if !email_confirmed?
   end
 
   def send_confirm_email
