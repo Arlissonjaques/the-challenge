@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :sessions, dependent: :destroy
   has_many :user_verifications, dependent: :destroy
+  has_many :posts, foreign_key: :author_id, dependent: :destroy
 
   enum role: { admin: 0, user: 1 }
 
