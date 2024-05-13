@@ -19,5 +19,10 @@ Rails.application.routes.draw do
       get 'verify_reset_password_token', to: 'passwords#verify_reset_password_token'
       put 'reset_password', to: 'passwords#reset_password'
     end
+
+    namespace :v1 do
+      resources :posts
+      resources :comments
+    end
   end
 end
