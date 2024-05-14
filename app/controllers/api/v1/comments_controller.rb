@@ -18,7 +18,7 @@ class Api::V1::CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
 
     if @comment.save
-      render 'comments/show', layout: 'layouts/success'
+      render 'comments/show', layout: 'layouts/success', status: :created
     else
       @error = @comment.errors
       render 'layouts/error', status: :unprocessable_entity

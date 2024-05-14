@@ -18,7 +18,7 @@ class Api::V1::PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
-      render 'posts/show', layout: 'layouts/success'
+      render 'posts/show', layout: 'layouts/success', status: :created
     else
       @error = @post.errors
       render 'layouts/error', status: :unprocessable_entity
