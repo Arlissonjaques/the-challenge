@@ -1,6 +1,6 @@
 require 'rails_helper'
 require 'json_web_token'
-include ApiAsJsonHelper
+# include ApiAsJsonHelper
 
 RSpec.describe Api::Auth::PasswordsController, type: :request do
   describe 'POST #forgot_password' do

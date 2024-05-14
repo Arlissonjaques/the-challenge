@@ -1,5 +1,5 @@
 require 'rails_helper'
-include ApiAsJsonHelper
+# include ApiAsJsonHelper
 
 RSpec.describe Api::Auth::ConfirmationsController, type: :request do
   describe 'GET #confirm_email' do

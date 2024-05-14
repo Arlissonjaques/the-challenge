@@ -1,5 +1,5 @@
 require 'rails_helper'
-include ApiAsJsonHelper
+# include ApiAsJsonHelper
 
 RSpec.describe Api::Auth::RegistrationsController, type: :request do
   describe 'POST #create' do

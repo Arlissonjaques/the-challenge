@@ -1,10 +1,12 @@
 require 'rails_helper'
-include ApiAsJsonHelper
+include BodyParsedHelper
+include AuthenticationHelper
 
 RSpec.describe Api::Auth::SessionsController, type: :request do
   describe 'POST #create' do
     context 'when credentials are valid' do
       let!(:user) { create(:user) }
+      let(:login_params) {{ email: user.email, password: user.password }}
 
       before { post api_auth_sign_in_path, params: login_params }
 
@@ -56,9 +58,13 @@ RSpec.describe Api::Auth::SessionsController, type: :request do
     end
 
     context 'when the email is not confirmed' do
-      let(:user) { create(:user, email_confirmed_at: nil) }
+      let(:user) { create(:user) }
+      let(:login_params) {{ email: user.email, password: user.password }}
 
-      before { post api_auth_sign_in_path, params: login_params }
+      before do
+        user.update(email_confirmed_at: nil)
+        post api_auth_sign_in_path, params: login_params
+      end
 
       it 'returns status 401 (Unauthorized)' do
         expect(response).to have_http_status(401)
